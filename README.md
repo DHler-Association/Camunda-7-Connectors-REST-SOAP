@@ -178,6 +178,10 @@ SoapHttpResponse response = request.execute()
 .close()
 ```
 
+## Extending connect
+
+https://docs.camunda.org/manual/7.17/reference/connect/extending-connect/
+
 # Sources
 
-- [Official documentation](https://docs.camunda.org/manual/7.17/reference/connect/) (not that good)
+- [Official documentation](https://docs.camunda.org/manual/7.17/reference/connect/)
