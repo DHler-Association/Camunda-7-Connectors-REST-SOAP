@@ -51,6 +51,133 @@ The effect is mostly the same. Response processing is simpler in Java Code.
 
 ![image](https://user-images.githubusercontent.com/101417551/209148286-ea40724e-3244-4162-b3db-5f073588d53f.png)
 
+# Features in the Java Code version
+
+## REST 
+
+### Create HttpConnector
+
+```java
+HttpConnector connector = Connectors.getConnector(HttpConnector.ID);
+```
+
+### Create HttpRequest
+
+```java
+HttpRequest request = connector.createRequest();
+```
+
+### Edit the HttpRequest Object
+
+#### Via method calls
+
+```java
+.post()
+.get()
+.url("http://camunda.org")
+.contentType("text/plain")
+.payload("Hello World!")
+.header("Accept", "application/json")
+```
+
+#### Via generic API
+
+```java
+.setRequestParameter("method", "GET")
+.setRequestParameter("url", "http://camunda.org")
+.setRequestParameter("payload", "hello world!")
+```
+
+### Execute HttpRequest
+
+HttpResponse response = request.execute()
+
+### Get data from HttpResponse Object
+
+#### Via method calls
+
+```java
+.getStatusCode()
+.getHeader("Content-Type")
+.getResponse()
+```
+
+#### Via generic API
+
+```java
+.getResponseParameter("statusCode")
+.getResponseParameter("headers")
+.getResponseParameter("response")
+```
+
+### Close HttpResponse Object after processing
+
+```java
+.close()
+```
+
+## SOAP
+
+### Create SoapHttpConnector 
+
+```java
+SoapHttpConnector soap = Connectors.getConnector(SoapHttpConnector.ID);
+```
+
+### Create SoapHttpRequest
+
+```java
+SoapHttpRequest request = connector.createRequest();
+```
+
+### Edit the SoapHttpRequest Object
+
+#### Via method calls
+
+```java
+.url("http://camunda.org/soap")
+.soapAction("doIt")
+.contentType("application/soap+xml")
+.header("Accept", "application/xml")
+.payload(soap_envelope)
+```
+
+#### Via generic API
+
+```java
+.setRequestParameter("method", "GET")
+.setRequestParameter("url", "http://camunda.org")
+setRequestParameter("payload", "hello world!")
+```
+
+### Execute SoapHttpRequest
+
+SoapHttpResponse response = request.execute()
+
+### Get data from SoapHttpResponse Object
+
+#### Via method calls
+
+```java
+.getStatusCode()
+.getHeader("Content-Type")
+.getResponse()
+```
+
+#### Via generic API
+
+```java
+.getResponseParameter("statusCode")
+.getResponseParameter("headers")
+.getResponseParameter("response")
+```
+
+### Close HttpResponse Object after processing
+
+```java
+.close()
+```
+
 # Sources
 
 - [Official documentation](https://docs.camunda.org/manual/7.17/reference/connect/) (not that good)
