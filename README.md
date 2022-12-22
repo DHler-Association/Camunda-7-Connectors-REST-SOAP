@@ -53,6 +53,45 @@ The effect is mostly the same. Response processing is simpler in Java Code.
 
 # Features in the Java Code version
 
+## Maven dependencies
+
+```xml
+<dependencyManagement>
+  <dependencies>
+    <dependency>
+      <groupId>org.camunda.connect</groupId>
+      <artifactId>camunda-connect-bom</artifactId>
+      <scope>import</scope>
+      <type>pom</type>
+      <version>1.5.6</version>
+    </dependency> 
+  </dependencies>
+</dependencyManagement>
+
+<dependencies>
+  <dependency>
+    <groupId>org.camunda.connect</groupId>
+	  <artifactId>camunda-connect-core</artifactId>
+	</dependency>
+	
+	<dependency>
+    <groupId>org.camunda.connect</groupId>
+	  <artifactId>camunda-connect-connectors-all</artifactId>
+	</dependency>
+	
+  <dependency>
+    <groupId>org.camunda.bpm</groupId>
+    <artifactId>camunda-engine-plugin-connect</artifactId>
+  </dependency>
+
+  <dependency>
+    <groupId>org.camunda.bpm</groupId>
+    <artifactId>camunda-engine-plugin-spin</artifactId>
+  </dependency>
+  
+</dependencies>
+```
+
 ## REST 
 
 ### Create HttpConnector
