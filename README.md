@@ -71,13 +71,13 @@ The effect is mostly the same. Response processing is simpler in Java Code.
 <dependencies>
   <dependency>
     <groupId>org.camunda.connect</groupId>
-	  <artifactId>camunda-connect-core</artifactId>
-	</dependency>
+    <artifactId>camunda-connect-core</artifactId>
+    </dependency>
 	
-	<dependency>
+  <dependency>
     <groupId>org.camunda.connect</groupId>
-	  <artifactId>camunda-connect-connectors-all</artifactId>
-	</dependency>
+    <artifactId>camunda-connect-connectors-all</artifactId>
+  </dependency>
 	
   <dependency>
     <groupId>org.camunda.bpm</groupId>
