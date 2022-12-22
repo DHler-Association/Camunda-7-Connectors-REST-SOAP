@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_038xygr" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.0.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.17.0">
+  <bpmn:message id="Message_3mmjtj5" name="superuserTweet" />
+  <bpmn:message id="Message_0i46l85" name="tweetWithdrawn" />
+  <bpmn:collaboration id="Collaboration_1qnz1ye">
+    <bpmn:participant id="Participant_14fppvt" name="Twitter-QA" processRef="TwitterQAProcess" />
+    <bpmn:group id="Group_1ro4asj" categoryValueRef="CategoryValue_0eet034" />
+    <bpmn:textAnnotation id="TextAnnotation_11d75zx">
+      <bpmn:text>Connectoren Tests</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:association id="Association_0hr6vhu" sourceRef="Group_1ro4asj" targetRef="TextAnnotation_11d75zx" />
+  </bpmn:collaboration>
+  <bpmn:process id="TwitterQAProcess" name="Twitter QA" isExecutable="true">
+    <bpmn:startEvent id="StartEvent_1" camunda:formKey="embedded:app:forms/startEventForm.html">
+      <bpmn:outgoing>Flow_08xs046</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:exclusiveGateway id="Gateway_09z3awn" name="is approved">
+      <bpmn:extensionElements />
+      <bpmn:incoming>Flow_1wef5tq</bpmn:incoming>
+      <bpmn:outgoing>Flow_0nq7g55</bpmn:outgoing>
+      <bpmn:outgoing>Flow_03xdy2v</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:serviceTask id="Activity_17opgjs" name="Notify user of rejection" camunda:type="external" camunda:topic="notification">
+      <bpmn:incoming>Flow_03xdy2v</bpmn:incoming>
+      <bpmn:outgoing>Flow_04qvx8b</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="Activity_0us8osk" name="publish Tweet" camunda:asyncBefore="true" camunda:class="com.camunda.training.CreateTweetDelegate">
+      <bpmn:extensionElements />
+      <bpmn:incoming>Flow_0nq7g55</bpmn:incoming>
+      <bpmn:incoming>Flow_1vbe0gy</bpmn:incoming>
+      <bpmn:outgoing>Flow_163u8nl</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:endEvent id="Event_1ms9s1v" name="Tweet declined">
+      <bpmn:incoming>Flow_04qvx8b</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:startEvent id="Event_09jg8io" name="Tweet submitted by superuser">
+      <bpmn:outgoing>Flow_1vbe0gy</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="MessageEventDefinition_1923ehf" messageRef="Message_3mmjtj5" />
+    </bpmn:startEvent>
+    <bpmn:serviceTask id="Activity_0aoxqin" name="SOAP-Connector in Modeler">
+      <bpmn:extensionElements>
+        <camunda:connector>
+          <camunda:inputOutput>
+            <camunda:inputParameter name="url">http://localhost:8080/ws</camunda:inputParameter>
+            <camunda:inputParameter name="payload">&lt;soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+				  xmlns:gs="http://spring.io/guides/gs-producing-web-service"&gt;
+   &lt;soapenv:Header/&gt;
+   &lt;soapenv:Body&gt;
+      &lt;gs:getCountryRequest&gt;
+         &lt;gs:name&gt;Spain&lt;/gs:name&gt;
+      &lt;/gs:getCountryRequest&gt;
+   &lt;/soapenv:Body&gt;
+&lt;/soapenv:Envelope&gt;</camunda:inputParameter>
+            <camunda:outputParameter name="statusCode">${statusCode}</camunda:outputParameter>
+            <camunda:outputParameter name="response">${response}</camunda:outputParameter>
+          </camunda:inputOutput>
+          <camunda:connectorId>soap-http-connector</camunda:connectorId>
+        </camunda:connector>
+      </bpmn:extensionElements>
+      <bpmn:outgoing>Flow_0eanxgq</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="Activity_1b4x4xy" name="REST-Connector in Modeler">
+      <bpmn:extensionElements>
+        <camunda:connector>
+          <camunda:inputOutput>
+            <camunda:inputParameter name="url">http://localhost:8083/add?n1=4&amp;n2=100</camunda:inputParameter>
+            <camunda:inputParameter name="method">GET</camunda:inputParameter>
+            <camunda:outputParameter name="response">${response}</camunda:outputParameter>
+            <camunda:outputParameter name="statusCode">${statusCode}</camunda:outputParameter>
+          </camunda:inputOutput>
+          <camunda:connectorId>http-connector</camunda:connectorId>
+        </camunda:connector>
+      </bpmn:extensionElements>
+      <bpmn:outgoing>Flow_0wdauw4</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:endEvent id="Event_1j9vgfs" name="Tweet published">
+      <bpmn:incoming>Flow_05v99jj</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:serviceTask id="Activity_1sz969g" name="Log it" camunda:class="com.camunda.training.LogDelegate">
+      <bpmn:incoming>Flow_19q1f6x</bpmn:incoming>
+      <bpmn:incoming>Flow_0wdauw4</bpmn:incoming>
+      <bpmn:incoming>Flow_0eanxgq</bpmn:incoming>
+      <bpmn:outgoing>Flow_05v99jj</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:businessRuleTask id="reviewTweet" name="review Tweet" camunda:resultVariable="approved" camunda:decisionRef="tweetApproval" camunda:mapDecisionResult="singleEntry">
+      <bpmn:extensionElements />
+      <bpmn:incoming>Flow_08xs046</bpmn:incoming>
+      <bpmn:outgoing>Flow_1wef5tq</bpmn:outgoing>
+    </bpmn:businessRuleTask>
+    <bpmn:sequenceFlow id="Flow_08xs046" sourceRef="StartEvent_1" targetRef="reviewTweet" />
+    <bpmn:sequenceFlow id="Flow_1wef5tq" sourceRef="reviewTweet" targetRef="Gateway_09z3awn" />
+    <bpmn:sequenceFlow id="Flow_0nq7g55" name="yes" sourceRef="Gateway_09z3awn" targetRef="Activity_0us8osk">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">#{approved== true}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_03xdy2v" name="no" sourceRef="Gateway_09z3awn" targetRef="Activity_17opgjs">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">#{approved== false}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_1vbe0gy" sourceRef="Event_09jg8io" targetRef="Activity_0us8osk" />
+    <bpmn:sequenceFlow id="Flow_04qvx8b" sourceRef="Activity_17opgjs" targetRef="Event_1ms9s1v" />
+    <bpmn:sequenceFlow id="Flow_163u8nl" sourceRef="Activity_0us8osk" targetRef="Activity_1nwqv76" />
+    <bpmn:sequenceFlow id="Flow_05v99jj" sourceRef="Activity_1sz969g" targetRef="Event_1j9vgfs" />
+    <bpmn:sequenceFlow id="Flow_19q1f6x" sourceRef="Activity_1nwqv76" targetRef="Activity_1sz969g" />
+    <bpmn:sequenceFlow id="Flow_0wdauw4" sourceRef="Activity_1b4x4xy" targetRef="Activity_1sz969g" />
+    <bpmn:serviceTask id="Activity_1nwqv76" name="Call Webservice in Code" camunda:class="com.camunda.training.CallWebserviceDelegate">
+      <bpmn:extensionElements />
+      <bpmn:incoming>Flow_163u8nl</bpmn:incoming>
+      <bpmn:outgoing>Flow_19q1f6x</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_0eanxgq" sourceRef="Activity_0aoxqin" targetRef="Activity_1sz969g" />
+  </bpmn:process>
+  <bpmn:category id="Category_1lnuzui">
+    <bpmn:categoryValue id="CategoryValue_0eet034" />
+  </bpmn:category>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_1qnz1ye">
+      <bpmndi:BPMNShape id="Participant_14fppvt_di" bpmnElement="Participant_14fppvt" isHorizontal="true">
+        <dc:Bounds x="160" y="80" width="1350" height="510" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_08xs046_di" bpmnElement="Flow_08xs046">
+        <di:waypoint x="248" y="369" />
+        <di:waypoint x="300" y="369" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1wef5tq_di" bpmnElement="Flow_1wef5tq">
+        <di:waypoint x="400" y="369" />
+        <di:waypoint x="445" y="369" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0nq7g55_di" bpmnElement="Flow_0nq7g55">
+        <di:waypoint x="495" y="369" />
+        <di:waypoint x="570" y="369" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="511" y="371" width="18" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_03xdy2v_di" bpmnElement="Flow_03xdy2v">
+        <di:waypoint x="470" y="394" />
+        <di:waypoint x="470" y="479" />
+        <di:waypoint x="570" y="479" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="483" y="412" width="13" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1vbe0gy_di" bpmnElement="Flow_1vbe0gy">
+        <di:waypoint x="533" y="288" />
+        <di:waypoint x="533" y="350" />
+        <di:waypoint x="570" y="350" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_04qvx8b_di" bpmnElement="Flow_04qvx8b">
+        <di:waypoint x="670" y="479" />
+        <di:waypoint x="762" y="479" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_163u8nl_di" bpmnElement="Flow_163u8nl">
+        <di:waypoint x="670" y="369" />
+        <di:waypoint x="940" y="369" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_05v99jj_di" bpmnElement="Flow_05v99jj">
+        <di:waypoint x="1290" y="369" />
+        <di:waypoint x="1422" y="369" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_19q1f6x_di" bpmnElement="Flow_19q1f6x">
+        <di:waypoint x="1040" y="369" />
+        <di:waypoint x="1190" y="369" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0wdauw4_di" bpmnElement="Flow_0wdauw4">
+        <di:waypoint x="1040" y="470" />
+        <di:waypoint x="1115" y="470" />
+        <di:waypoint x="1115" y="390" />
+        <di:waypoint x="1190" y="390" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0eanxgq_di" bpmnElement="Flow_0eanxgq">
+        <di:waypoint x="1040" y="270" />
+        <di:waypoint x="1115" y="270" />
+        <di:waypoint x="1115" y="350" />
+        <di:waypoint x="1190" y="350" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="212" y="351" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_09z3awn_di" bpmnElement="Gateway_09z3awn" isMarkerVisible="true">
+        <dc:Bounds x="445" y="344" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="442" y="314" width="57" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1c8rpyu_di" bpmnElement="Activity_17opgjs">
+        <dc:Bounds x="570" y="439" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1py6vxj_di" bpmnElement="Activity_0us8osk">
+        <dc:Bounds x="570" y="329" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1ms9s1v_di" bpmnElement="Event_1ms9s1v">
+        <dc:Bounds x="762" y="461" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="744" y="504" width="74" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1flglsi_di" bpmnElement="Event_09jg8io">
+        <dc:Bounds x="515" y="252" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="492" y="214.5" width="81" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_03rzv7g_di" bpmnElement="Activity_0aoxqin">
+        <dc:Bounds x="940" y="230" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_03pt2mv_di" bpmnElement="Activity_1b4x4xy">
+        <dc:Bounds x="940" y="430" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1j9vgfs_di" bpmnElement="Event_1j9vgfs">
+        <dc:Bounds x="1422" y="351" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1401" y="394" width="80" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_00w9519_di" bpmnElement="Activity_1sz969g">
+        <dc:Bounds x="1190" y="329" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1fjyybv_di" bpmnElement="reviewTweet">
+        <dc:Bounds x="300" y="329" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0ho4rg1_di" bpmnElement="Activity_1nwqv76">
+        <dc:Bounds x="940" y="329" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="TextAnnotation_11d75zx_di" bpmnElement="TextAnnotation_11d75zx">
+        <dc:Bounds x="1230" y="110" width="99.99274099883856" height="40.65040650406504" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Association_0hr6vhu_di" bpmnElement="Association_0hr6vhu">
+        <di:waypoint x="1224" y="190" />
+        <di:waypoint x="1258" y="151" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Group_1ro4asj_di" bpmnElement="Group_1ro4asj">
+        <dc:Bounds x="900" y="190" width="410" height="370" />
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
