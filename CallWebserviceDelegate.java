@@ -6,8 +6,12 @@ import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
 import org.camunda.connect.Connectors;
 import org.camunda.connect.httpclient.HttpConnector;
+import org.camunda.connect.httpclient.HttpRequest;
+import org.camunda.connect.httpclient.HttpResponse;
 import org.camunda.connect.httpclient.soap.SoapHttpConnector;
 import org.camunda.connect.httpclient.soap.SoapHttpRequest;
+import org.camunda.connect.httpclient.soap.SoapHttpResponse;
+import org.camunda.connect.spi.ConnectorRequest;
 import org.camunda.connect.spi.ConnectorResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,8 +23,8 @@ public class CallWebserviceDelegate implements JavaDelegate {
 		
 		LOGGER.info("Starte Connector test");
 		
-		String response = testRESTConnectorSimple();
-		//String response = testSOAPConnector();
+		//String response = testRESTConnectorSimple();
+		String response = testSOAPConnector();
 		
 		execution.setVariable("response", response);
 		
@@ -36,10 +40,12 @@ public class CallWebserviceDelegate implements JavaDelegate {
 		
 		///*
 		//Calling via config methods
-		ConnectorResponse response = connector.createRequest()
-		  .get()
-		  .url("http://localhost:8083/helloWorld")
-		  .execute();
+		HttpRequest request = connector.createRequest()
+				.get()
+				.url("http://localhost:8083/helloWorld");
+		HttpResponse response = request.execute();
+		
+		String responseString = response.getResponse();
 		//*/
 		
 		/*
@@ -47,22 +53,24 @@ public class CallWebserviceDelegate implements JavaDelegate {
 		HttpRequest request = connector.createRequest();
 		request.setRequestParameter("method", "GET");
 		request.setRequestParameter("url", "http://localhost:8083/add?n1=8&n2=9");
-		ConnectorResponse response = request.execute();
+		HttpResponse response = request.execute();	
 		
-		logRequest(request);
+		String responseString = response.getResponseParameter("response");
 		*/
 		
-		
+		logRequest(request);
 		logResponse(response);
 		
-		return response.getResponseParameter("response");
+		response.close();
+		
+		return responseString;
 	}
 	
 	public String testSOAPConnector() {
 		SoapHttpConnector connector = Connectors.getConnector(SoapHttpConnector.ID);
 		
-		///*
-		ConnectorResponse response = connector.createRequest()
+		/*
+		SoapHttpRequest request = connector.createRequest()
 		  .url("http://localhost:8080/ws")
 		  .payload("<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\"\r\n"
 		  		+ "				  xmlns:gs=\"http://spring.io/guides/gs-producing-web-service\">\r\n"
@@ -72,11 +80,13 @@ public class CallWebserviceDelegate implements JavaDelegate {
 		  		+ "         <gs:name>Spain</gs:name>\r\n"
 		  		+ "      </gs:getCountryRequest>\r\n"
 		  		+ "   </soapenv:Body>\r\n"
-		  		+ "</soapenv:Envelope>")
-		  .execute();
-		 //*/
+		  		+ "</soapenv:Envelope>");
+		SoapHttpResponse response = request.execute();
 		
-		/*
+		String responseString = response.getResponse();
+		*/
+		
+		///*
 		SoapHttpRequest request = connector.createRequest();
 		request.setRequestParameter("url", "http://localhost:8080/ws");
 		request.setRequestParameter("payload", "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\"\r\n"
@@ -88,17 +98,20 @@ public class CallWebserviceDelegate implements JavaDelegate {
 		  		+ "      </gs:getCountryRequest>\r\n"
 		  		+ "   </soapenv:Body>\r\n"
 		  		+ "</soapenv:Envelope>");
-		ConnectorResponse response = request.execute();
+		SoapHttpResponse response = request.execute();
 		
+		String responseString = response.getResponseParameter("response");
+		//*/
+
 		logRequest(request);
-		*/
-		
 		logResponse(response);
+		
+		response.close();
 			
-		return response.getResponseParameter("response");
+		return responseString;
 	}
 	
-	public void logRequest(SoapHttpRequest request) {
+	public void logRequest(ConnectorRequest<?> request) {
 		LOGGER.info("Request parameters:");
 		Map<String, Object> requestParameters = request.getRequestParameters();
 		for(String parameter : requestParameters.keySet()) {

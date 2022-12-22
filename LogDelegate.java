@@ -11,10 +11,8 @@ public class LogDelegate implements JavaDelegate {
 	public void execute(DelegateExecution execution) throws Exception {
 
 		String response = (String) execution.getVariable("response");
-		int statusCode = (Integer) execution.getVariable("statusCode");
 		
 		LOGGER.info("Webservice response: " + response);
-		LOGGER.info("Webservice status code: " + statusCode);
 			
 	}
 	
