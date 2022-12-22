@@ -23,8 +23,8 @@ public class CallWebserviceDelegate implements JavaDelegate {
 		
 		LOGGER.info("Starte Connector test");
 		
-		//String response = testRESTConnectorSimple();
-		String response = testSOAPConnector();
+		String response = testRESTConnector();
+		//String response = testSOAPConnector();
 		
 		execution.setVariable("response", response);
 		
@@ -33,7 +33,7 @@ public class CallWebserviceDelegate implements JavaDelegate {
 	}
 	
 	//Simple REST-Call without parameters
-	public String testRESTConnectorSimple() throws InterruptedException {
+	public String testRESTConnector() throws InterruptedException {
 		LOGGER.info("Starte REST Connector Test");
 		
 		HttpConnector connector = Connectors.getConnector(HttpConnector.ID);
@@ -69,7 +69,7 @@ public class CallWebserviceDelegate implements JavaDelegate {
 	public String testSOAPConnector() {
 		SoapHttpConnector connector = Connectors.getConnector(SoapHttpConnector.ID);
 		
-		/*
+		///*
 		SoapHttpRequest request = connector.createRequest()
 		  .url("http://localhost:8080/ws")
 		  .payload("<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\"\r\n"
@@ -84,9 +84,9 @@ public class CallWebserviceDelegate implements JavaDelegate {
 		SoapHttpResponse response = request.execute();
 		
 		String responseString = response.getResponse();
-		*/
+		//*/
 		
-		///*
+		/*
 		SoapHttpRequest request = connector.createRequest();
 		request.setRequestParameter("url", "http://localhost:8080/ws");
 		request.setRequestParameter("payload", "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\"\r\n"
@@ -101,7 +101,7 @@ public class CallWebserviceDelegate implements JavaDelegate {
 		SoapHttpResponse response = request.execute();
 		
 		String responseString = response.getResponseParameter("response");
-		//*/
+		*/
 
 		logRequest(request);
 		logResponse(response);

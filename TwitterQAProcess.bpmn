@@ -57,7 +57,7 @@
           <camunda:connectorId>soap-http-connector</camunda:connectorId>
         </camunda:connector>
       </bpmn:extensionElements>
-      <bpmn:outgoing>Flow_0eanxgq</bpmn:outgoing>
+      <bpmn:outgoing>Flow_0cibbil</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:serviceTask id="Activity_1b4x4xy" name="REST-Connector in Modeler">
       <bpmn:extensionElements>
@@ -71,16 +71,16 @@
           <camunda:connectorId>http-connector</camunda:connectorId>
         </camunda:connector>
       </bpmn:extensionElements>
-      <bpmn:outgoing>Flow_0wdauw4</bpmn:outgoing>
+      <bpmn:outgoing>Flow_0op06lb</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:endEvent id="Event_1j9vgfs" name="Tweet published">
-      <bpmn:incoming>Flow_05v99jj</bpmn:incoming>
+      <bpmn:incoming>Flow_1q6g0z8</bpmn:incoming>
     </bpmn:endEvent>
     <bpmn:serviceTask id="Activity_1sz969g" name="Log it" camunda:class="com.camunda.training.LogDelegate">
       <bpmn:incoming>Flow_19q1f6x</bpmn:incoming>
-      <bpmn:incoming>Flow_0wdauw4</bpmn:incoming>
-      <bpmn:incoming>Flow_0eanxgq</bpmn:incoming>
-      <bpmn:outgoing>Flow_05v99jj</bpmn:outgoing>
+      <bpmn:incoming>Flow_0op06lb</bpmn:incoming>
+      <bpmn:incoming>Flow_0cibbil</bpmn:incoming>
+      <bpmn:outgoing>Flow_1q6g0z8</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:businessRuleTask id="reviewTweet" name="review Tweet" camunda:resultVariable="approved" camunda:decisionRef="tweetApproval" camunda:mapDecisionResult="singleEntry">
       <bpmn:extensionElements />
@@ -98,15 +98,15 @@
     <bpmn:sequenceFlow id="Flow_1vbe0gy" sourceRef="Event_09jg8io" targetRef="Activity_0us8osk" />
     <bpmn:sequenceFlow id="Flow_04qvx8b" sourceRef="Activity_17opgjs" targetRef="Event_1ms9s1v" />
     <bpmn:sequenceFlow id="Flow_163u8nl" sourceRef="Activity_0us8osk" targetRef="Activity_1nwqv76" />
-    <bpmn:sequenceFlow id="Flow_05v99jj" sourceRef="Activity_1sz969g" targetRef="Event_1j9vgfs" />
     <bpmn:sequenceFlow id="Flow_19q1f6x" sourceRef="Activity_1nwqv76" targetRef="Activity_1sz969g" />
-    <bpmn:sequenceFlow id="Flow_0wdauw4" sourceRef="Activity_1b4x4xy" targetRef="Activity_1sz969g" />
     <bpmn:serviceTask id="Activity_1nwqv76" name="Call Webservice in Code" camunda:class="com.camunda.training.CallWebserviceDelegate">
       <bpmn:extensionElements />
       <bpmn:incoming>Flow_163u8nl</bpmn:incoming>
       <bpmn:outgoing>Flow_19q1f6x</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:sequenceFlow id="Flow_0eanxgq" sourceRef="Activity_0aoxqin" targetRef="Activity_1sz969g" />
+    <bpmn:sequenceFlow id="Flow_1q6g0z8" sourceRef="Activity_1sz969g" targetRef="Event_1j9vgfs" />
+    <bpmn:sequenceFlow id="Flow_0op06lb" sourceRef="Activity_1b4x4xy" targetRef="Activity_1sz969g" />
+    <bpmn:sequenceFlow id="Flow_0cibbil" sourceRef="Activity_0aoxqin" targetRef="Activity_1sz969g" />
   </bpmn:process>
   <bpmn:category id="Category_1lnuzui">
     <bpmn:categoryValue id="CategoryValue_0eet034" />
@@ -117,20 +117,22 @@
         <dc:Bounds x="160" y="80" width="1350" height="510" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="Flow_08xs046_di" bpmnElement="Flow_08xs046">
-        <di:waypoint x="248" y="369" />
-        <di:waypoint x="300" y="369" />
+      <bpmndi:BPMNEdge id="Flow_19q1f6x_di" bpmnElement="Flow_19q1f6x">
+        <di:waypoint x="1040" y="369" />
+        <di:waypoint x="1190" y="369" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1wef5tq_di" bpmnElement="Flow_1wef5tq">
-        <di:waypoint x="400" y="369" />
-        <di:waypoint x="445" y="369" />
+      <bpmndi:BPMNEdge id="Flow_163u8nl_di" bpmnElement="Flow_163u8nl">
+        <di:waypoint x="670" y="369" />
+        <di:waypoint x="940" y="369" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0nq7g55_di" bpmnElement="Flow_0nq7g55">
-        <di:waypoint x="495" y="369" />
-        <di:waypoint x="570" y="369" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="511" y="371" width="18" height="14" />
-        </bpmndi:BPMNLabel>
+      <bpmndi:BPMNEdge id="Flow_04qvx8b_di" bpmnElement="Flow_04qvx8b">
+        <di:waypoint x="670" y="479" />
+        <di:waypoint x="762" y="479" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1vbe0gy_di" bpmnElement="Flow_1vbe0gy">
+        <di:waypoint x="533" y="288" />
+        <di:waypoint x="533" y="350" />
+        <di:waypoint x="570" y="350" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_03xdy2v_di" bpmnElement="Flow_03xdy2v">
         <di:waypoint x="470" y="394" />
@@ -140,34 +142,32 @@
           <dc:Bounds x="483" y="412" width="13" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1vbe0gy_di" bpmnElement="Flow_1vbe0gy">
-        <di:waypoint x="533" y="288" />
-        <di:waypoint x="533" y="350" />
-        <di:waypoint x="570" y="350" />
+      <bpmndi:BPMNEdge id="Flow_0nq7g55_di" bpmnElement="Flow_0nq7g55">
+        <di:waypoint x="495" y="369" />
+        <di:waypoint x="570" y="369" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="511" y="371" width="18" height="14" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_04qvx8b_di" bpmnElement="Flow_04qvx8b">
-        <di:waypoint x="670" y="479" />
-        <di:waypoint x="762" y="479" />
+      <bpmndi:BPMNEdge id="Flow_1wef5tq_di" bpmnElement="Flow_1wef5tq">
+        <di:waypoint x="400" y="369" />
+        <di:waypoint x="445" y="369" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_163u8nl_di" bpmnElement="Flow_163u8nl">
-        <di:waypoint x="670" y="369" />
-        <di:waypoint x="940" y="369" />
+      <bpmndi:BPMNEdge id="Flow_08xs046_di" bpmnElement="Flow_08xs046">
+        <di:waypoint x="248" y="369" />
+        <di:waypoint x="300" y="369" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_05v99jj_di" bpmnElement="Flow_05v99jj">
+      <bpmndi:BPMNEdge id="Flow_1q6g0z8_di" bpmnElement="Flow_1q6g0z8">
         <di:waypoint x="1290" y="369" />
         <di:waypoint x="1422" y="369" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_19q1f6x_di" bpmnElement="Flow_19q1f6x">
-        <di:waypoint x="1040" y="369" />
-        <di:waypoint x="1190" y="369" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0wdauw4_di" bpmnElement="Flow_0wdauw4">
+      <bpmndi:BPMNEdge id="Flow_0op06lb_di" bpmnElement="Flow_0op06lb">
         <di:waypoint x="1040" y="470" />
         <di:waypoint x="1115" y="470" />
         <di:waypoint x="1115" y="390" />
         <di:waypoint x="1190" y="390" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0eanxgq_di" bpmnElement="Flow_0eanxgq">
+      <bpmndi:BPMNEdge id="Flow_0cibbil_di" bpmnElement="Flow_0cibbil">
         <di:waypoint x="1040" y="270" />
         <di:waypoint x="1115" y="270" />
         <di:waypoint x="1115" y="350" />
@@ -227,6 +227,9 @@
         <dc:Bounds x="940" y="329" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Group_1ro4asj_di" bpmnElement="Group_1ro4asj">
+        <dc:Bounds x="900" y="190" width="410" height="370" />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="TextAnnotation_11d75zx_di" bpmnElement="TextAnnotation_11d75zx">
         <dc:Bounds x="1230" y="110" width="99.99274099883856" height="40.65040650406504" />
         <bpmndi:BPMNLabel />
@@ -235,9 +238,6 @@
         <di:waypoint x="1224" y="190" />
         <di:waypoint x="1258" y="151" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNShape id="Group_1ro4asj_di" bpmnElement="Group_1ro4asj">
-        <dc:Bounds x="900" y="190" width="410" height="370" />
-      </bpmndi:BPMNShape>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
 </bpmn:definitions>
