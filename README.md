@@ -55,6 +55,8 @@ The effect is mostly the same. Response processing is simpler in Java Code.
 
 ## Maven dependencies
 
+Although the Camunda documentation says that only the top two dependencies are necessary, the process only runs through without errors, if all four dependencies have been added to the pom.
+
 ```xml
 <dependencyManagement>
   <dependencies>
